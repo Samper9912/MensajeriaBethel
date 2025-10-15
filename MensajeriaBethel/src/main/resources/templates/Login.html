@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Colegio Bethel</title>
+
+    <!-- Google Fonts Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F7F7F7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Contenedor central */
+        .login-container {
+            background-color: #F7F7F7;
+            border-radius: 25px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        /* Logo */
+        .login-container img {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        /* Título */
+        .login-container h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3FB056;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        /* Texto */
+        .login-container p {
+            font-size: 16px;
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        /* Inputs */
+        .login-container input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        /* Botón continuar */
+        .btn-continuar {
+            width: 60%;
+            padding: 12px;
+            background-color: #3FB056;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 22px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-continuar:hover {
+            background-color: #36a049;
+        }
+
+        /* Responsividad */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+
+            .login-container h1 {
+                font-size: 20px;
+            }
+
+            .login-container p, .login-container input, .btn-continuar {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <img th:src="@{/logohome.png}" alt="Logo Colegio Bethel">
+    <h1>INICIAR SESIÓN</h1>
+    <p>Ingrese sus credenciales para acceder a la bandeja de mensajes del colegio.</p>
+    <form th:action="@{/LoginPrivadoAdmin}" method="post">
+        <input type="text" name="usuario" placeholder="Usuario" required>
+        <input type="password" name="contrasena" placeholder="Contraseña" required>
+        <button type="submit" class="btn-continuar">Continuar</button>
+        <!-- Mensaje de error -->
+        <div th:if="${error}" style="color:red; font-size:13px; margin-top:10px;" th:text="${error}"></div>
+    </form>
+
+</div>
+
+</body>
+</html>
