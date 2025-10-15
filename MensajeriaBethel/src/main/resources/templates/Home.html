@@ -142,6 +142,7 @@
         <form id="formMensaje">
             <label for="nombreRemitente">Nombre:</label>
             <input type="text" id="nombreRemitente" name="nombreRemitente" required>
+            <input type="hidden" id="nombreTrabajadorHidden" name="nombreTrabajador">
 
             <label for="asunto">Asunto:</label>
             <input type="text" id="asunto" name="asunto" required>
@@ -163,14 +164,17 @@
     const emailDestinatarioInput = document.getElementById("emailDestinatario");
     const cargando = document.getElementById("cargando");
 
-    document.querySelectorAll(".btn-enviar").forEach(button => {
-        button.addEventListener("click", function() {
-            const fila = button.closest("tr");
-            const email = fila.querySelectorAll("td")[1].textContent;
-            emailDestinatarioInput.value = email;
-            modal.style.display = "block";
-        });
+document.querySelectorAll(".btn-enviar").forEach(button => {
+    button.addEventListener("click", function() {
+        const fila = button.closest("tr");
+        const email = fila.querySelectorAll("td")[1].textContent;
+        const nombreTrabajador = fila.querySelectorAll("td")[0].textContent; // <-- Primer columna: nombre
+        emailDestinatarioInput.value = email;
+        document.getElementById("nombreTrabajadorHidden").value = nombreTrabajador; // hidden input
+        modal.style.display = "block";
     });
+});
+
 
     spanClose.onclick = function() { modal.style.display = "none"; }
     window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }

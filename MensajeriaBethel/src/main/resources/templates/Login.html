@@ -114,7 +114,10 @@
         <input type="text" name="usuario" placeholder="Usuario" required>
         <input type="password" name="contrasena" placeholder="Contraseña" required>
         <button type="submit" class="btn-continuar">Continuar</button>
+        <!-- Mensaje de error -->
+        <div th:if="${error}" style="color:red; font-size:13px; margin-top:10px;" th:text="${error}"></div>
     </form>
+
 </div>
 
 </body>

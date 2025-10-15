@@ -6,6 +6,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MensajeService {
 
@@ -30,6 +32,9 @@ public class MensajeService {
 
         // Enviar email
         mailSender.send(email);
+    }
+    public List<Mensaje> obtenerTodosMensajes() {
+        return mensajeRepository.findAll();
     }
 
 

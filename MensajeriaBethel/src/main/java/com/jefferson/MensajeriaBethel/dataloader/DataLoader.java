@@ -27,7 +27,7 @@ public class DataLoader implements CommandLineRunner {
         Trabajador[] trabajadores = {
                 new Trabajador("Alvarado Toro Maricela", "maralexfive@hotmail.com", "3213716608", "Coordinadora de Convivencia", null, false),
                 new Trabajador("Baron Gonzales Saira Janeth", "sajaba2688@hotmail.com", "3203426622", "Profesor", "Ética y Religión", true),
-                new Trabajador("Jefferson Samper", "yeestahe@gmail.com", "3104102962", "Rector", null, false),
+                new Trabajador("Nidia blanco", "nidiablanco38@hotmail.com", "3104102962", "Rector", null, false),
                 new Trabajador("Delgadillo Pineda Michael Steven", "maiii.colombiaaa@gmail.com", "3226142016", "Profesor", "Inglés", true),
                 new Trabajador("Garzon Espinosa Michel Valentina", "michelvalentina1021@outlook.com", "3212849281", "Profesor", "Química", true),
                 new Trabajador("Manchego Vargas Luis Miguel", "miguel10-02@hotmail.com", "3155875036", "Profesor", "Educación Física", true),
