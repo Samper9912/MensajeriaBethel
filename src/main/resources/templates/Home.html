@@ -3,211 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Colegio Bethel</title>
+    <title>Colegio Bethel</title>
 
     <!-- Google Fonts Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
 
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Reset básico */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; }
+        .bg-custom-green { background-color: #3FB056; }
+        .text-custom-green { color: #3FB056; }
+        .shadow-custom { box-shadow: 0 10px 15px -3px rgba(59, 176, 86, 0.2), 0 4px 6px -2px rgba(59, 176, 86, 0.1); }
 
-        body { font-family: 'Poppins', sans-serif; background-color: #fff; }
-
-        .header-logo { width: 100%; background-color: #F7F7F7; display: flex; justify-content: center; align-items: center; padding: 40px 0; }
-        .header-logo img { max-width: 200px; height: auto; }
-
-        .welcome-section { width: 100%; background-color: #3FB156; display: flex; flex-wrap: wrap; padding: 60px 10%; color: white; }
-        .welcome-left { flex: 1; display: flex; justify-content: center; align-items: center; min-width: 300px; }
-        .welcome-left img { max-width: 100%; height: auto; }
-        .welcome-right { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; min-width: 300px; }
-        .welcome-right h1 { font-weight: 700; font-size: 85px; margin-bottom: 20px; }
-        .welcome-right p { font-weight: 300; font-size: 12px; line-height: 1.6; margin-bottom: 30px; }
-        .welcome-right .btn-continuar { background-color: white; color: #3FB156; font-weight: 700; font-size: 16px; border: none; border-radius: 22px; cursor: pointer; width: 225px; height: 44px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-
-        .divider { width: 100%; height: 1px; background-color: #3FB156; margin: 15px 0; }
-
-        .grupo-trabajadores { background-color: #EFEFEF; border-radius: 26px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 50px auto; padding: 20px; max-width: 1000px; }
-        .grupo-trabajadores h2 { font-weight: 700; font-size: 36px; color: #333333; text-align: center; margin-bottom: 15px; }
-
-        .tabla-trabajadores { width: 100%; border-collapse: collapse; }
-        .tabla-trabajadores thead { background-color: #3FB056; color: white; }
-        .tabla-trabajadores th, .tabla-trabajadores td { text-align: center; padding: 12px; font-weight: 400; font-size: 14px; }
-        .tabla-trabajadores tbody tr:nth-child(even) { background-color: #f5f5f5; }
-
-        .btn-enviar { background-color: #3FB056; color: white; border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-weight: 700; }
-
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
-        .modal-content { background-color: #fff; margin: 10% auto; padding: 30px; border-radius: 25px; width: 90%; max-width: 500px; font-family: 'Poppins', sans-serif; position: relative; }
-
-        .modal-content h2 { color: #3FB056; font-weight: 700; font-size: 24px; text-align: center; margin-bottom: 20px; }
-        .modal-content label { display: block; margin: 10px 0 5px; font-weight: 500; }
-        .modal-content input, .modal-content textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 15px; font-family: 'Poppins', sans-serif; font-size: 14px; }
-        .modal-content button { background-color: #3FB056; color: white; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 700; font-size: 16px; cursor: pointer; width: 100%; }
-
-        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .close:hover { color: #000; }
-
-        .cargando { display: none; text-align: center; font-weight: 700; color: #3FB056; margin-bottom: 10px; }
-
-        /* Responsividad */
-        @media (max-width: 768px) {
-            .welcome-section { flex-direction: column; padding: 40px 5%; }
-            .welcome-right h1 { font-size: 50px; }
-            .welcome-right .btn-continuar { width: 200px; height: 40px; }
-            .grupo-trabajadores h2 { font-size: 28px; }
-            .tabla-trabajadores th, .tabla-trabajadores td { font-size: 12px; }
+        /* Estilos para el mensaje de notificación (Toast) */
+        #notificacion {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #10B981; /* Verde esmeralda para éxito */
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            z-index: 1000;
+            font-weight: 600;
         }
+
     </style>
 </head>
-<body>
+<body class="bg-gray-50">
 
-<div class="header-logo">
-    <img th:src="@{/logohome.png}" alt="Logo Colegio Bethel">
+<!-- Modal de Carga (Loading Spinner) -->
+<div id="cargando" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-custom-green"></div>
+        <p class="mt-4 text-gray-700">Enviando mensaje...</p>
+    </div>
 </div>
 
-<div class="welcome-section">
-    <div class="welcome-left">
-        <img th:src="@{/emailsillustration.png}" alt="Illustration">
+<!-- Mensaje de Notificación (Toast) -->
+<div id="notificacion"></div>
+
+<header class="bg-white shadow-md">
+    <div class="max-w-6xl mx-auto flex justify-between items-center py-4 px-4 sm:px-6 lg:px-8">
+        <img th:src="@{/logohome.png}" alt="Logo Colegio Bethel" class="h-12">
+        <nav>
+            <!-- Asegúrate que esta ruta funcione si está autenticado -->
+            <a th:href="@{/bandeja}" class="text-gray-600 hover:text-custom-green px-3 py-2 text-sm font-medium">Bandeja</a>
+            <a th:href="@{/login}" class="text-gray-600 hover:text-custom-green px-3 py-2 text-sm font-medium">Login</a>
+        </nav>
     </div>
-    <div class="welcome-right">
-        <h1>Bienvenido</h1>
-        <p>
-            A continuación encontrará la lista de docentes y administrativos del colegio Bethel,
-            y, a través de la plataforma, tendrá la posibilidad de dejarles algún mensaje en su correo personal.
-            <br><br>
-            Recuerde que el respeto es la base de una comunicación asertiva en el proceso educativo de sus hijos.
+</header>
+
+<main class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            Mensajería Directa Colegio Bethel
+        </h1>
+        <p class="mt-4 text-lg text-gray-500">
+            Contacta a un trabajador de la institución de forma rápida y segura.
         </p>
-        <button class="btn-continuar">Continuar</button>
     </div>
-</div>
 
-<div class="divider"></div>
+    <div class="mt-10 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+        <form id="mensajeForm" action="/enviarMensaje" method="POST" class="space-y-6">
 
-<div th:each="grupo : ${docentesPorMateriaAttribute}">
-    <div class="grupo-trabajadores">
-        <h2 th:text="${grupo.key}"></h2>
-        <table class="tabla-trabajadores">
-            <thead>
-            <tr>
-                <th>Nombres</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-                <th>Enviar mensaje</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="trabajador : ${grupo.value}">
-                <td th:text="${trabajador.nombres}"></td>
-                <td th:text="${trabajador.correo}"></td>
-                <td th:text="${trabajador.telefono}"></td>
-                <td><button class="btn-enviar">Enviar mensaje</button></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+            <!-- Campo Oculto (Anti-CSRF si fuera necesario, o algún dato de la sesión) -->
+            <!-- <input type="hidden" name="_csrf" th:value="${_csrf.token}" /> -->
 
-<div th:each="grupo : ${noDocentesPorCargoAttribute}">
-    <div class="grupo-trabajadores">
-        <h2 th:text="${grupo.key}"></h2>
-        <table class="tabla-trabajadores">
-            <thead>
-            <tr>
-                <th>Nombres</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-                <th>Enviar mensaje</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="trabajador : ${grupo.value}">
-                <td th:text="${trabajador.nombres}"></td>
-                <td th:text="${trabajador.correo}"></td>
-                <td th:text="${trabajador.telefono}"></td>
-                <td><button class="btn-enviar">Enviar mensaje</button></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+            <!-- Nombre del Remitente -->
+            <div>
+                <label for="nombreRemitente" class="block text-sm font-medium text-gray-700">Tu Nombre Completo</label>
+                <input type="text" id="nombreRemitente" name="nombreRemitente" required
+                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-custom-green focus:border-custom-green sm:text-sm">
+            </div>
 
-<!-- Modal -->
-<div id="modalMensaje" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Enviar Mensaje</h2>
-        <div class="cargando" id="cargando">Enviando mensaje...</div>
-        <form id="formMensaje">
-            <label for="nombreRemitente">Nombre:</label>
-            <input type="text" id="nombreRemitente" name="nombreRemitente" required>
-            <input type="hidden" id="nombreTrabajadorHidden" name="nombreTrabajador">
+            <!-- Email Destinatario -->
+            <div>
+                <label for="emailDestinatario" class="block text-sm font-medium text-gray-700">Destinatario (Email del Trabajador)</label>
+                <input type="email" id="emailDestinatario" name="emailDestinatario" required
+                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-custom-green focus:border-custom-green sm:text-sm">
+            </div>
 
-            <label for="asunto">Asunto:</label>
-            <input type="text" id="asunto" name="asunto" required>
+            <!-- Nombre del Trabajador (Si se requiere para el registro en DB) -->
+            <div>
+                <label for="nombreTrabajador" class="block text-sm font-medium text-gray-700">Nombre del Trabajador (Opcional para registro)</label>
+                <input type="text" id="nombreTrabajador" name="nombreTrabajador"
+                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-custom-green focus:border-custom-green sm:text-sm">
+            </div>
 
-            <label for="emailDestinatario">Email Destinatario:</label>
-            <input type="email" id="emailDestinatario" name="emailDestinatario" readonly>
+            <!-- Asunto -->
+            <div>
+                <label for="asunto" class="block text-sm font-medium text-gray-700">Asunto</label>
+                <input type="text" id="asunto" name="asunto" required
+                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-custom-green focus:border-custom-green sm:text-sm">
+            </div>
 
-            <label for="mensaje">Mensaje:</label>
-            <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+            <!-- Mensaje -->
+            <div>
+                <label for="mensaje" class="block text-sm font-medium text-gray-700">Mensaje</label>
+                <textarea id="mensaje" name="mensaje" rows="4" required
+                          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-custom-green focus:border-custom-green sm:text-sm"></textarea>
+            </div>
 
-            <button type="submit" class="btn-enviar">Enviar</button>
+            <!-- Botón de Envío -->
+            <div>
+                <button type="submit"
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-custom text-base font-medium text-white bg-custom-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-green transition duration-150 ease-in-out">
+                    Enviar Mensaje
+                </button>
+            </div>
         </form>
     </div>
-</div>
+</main>
 
 <script>
-    const modal = document.getElementById("modalMensaje");
-    const spanClose = document.getElementsByClassName("close")[0];
-    const emailDestinatarioInput = document.getElementById("emailDestinatario");
-    const cargando = document.getElementById("cargando");
+    document.getElementById('mensajeForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Detiene el envío normal del formulario
 
-document.querySelectorAll(".btn-enviar").forEach(button => {
-    button.addEventListener("click", function() {
-        const fila = button.closest("tr");
-        const email = fila.querySelectorAll("td")[1].textContent;
-        const nombreTrabajador = fila.querySelectorAll("td")[0].textContent; // <-- Primer columna: nombre
-        emailDestinatarioInput.value = email;
-        document.getElementById("nombreTrabajadorHidden").value = nombreTrabajador; // hidden input
-        modal.style.display = "block";
+        const form = e.target;
+        const formData = new FormData(form);
+        const cargando = document.getElementById('cargando');
+        const notificacion = document.getElementById('notificacion');
+
+        cargando.style.display = "flex"; // Muestra el modal de carga
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            cargando.style.display = "none"; // Oculta la carga
+
+            // *** CAMBIO CRUCIAL ***
+            // Ya no revisamos el texto de la respuesta. Solo revisamos el estado HTTP.
+            if (!response.ok) {
+                // Si el estado HTTP no es 200 (OK), es un fallo real.
+                // Aquí mostramos el error de red/servidor (que antes era un alert)
+                throw new Error('Fallo al enviar mensaje: ' + response.statusText);
+            }
+
+            // Si la respuesta es 200 (OK), el proceso continúa al .then() de éxito.
+            // Es importante consumir la respuesta aunque no la usemos.
+            return response.text();
+        })
+        .then(result => {
+            // ÉXITO: El servidor devolvió 200 OK.
+
+            // 1. Mostrar notificación de éxito
+            mostrarNotificacion("Mensaje enviado correctamente.", '#10B981'); // Verde
+
+            // 2. Limpiar el formulario
+            form.reset();
+        })
+        .catch(error => {
+            // ERROR: Fallo de red o el servidor devolvió un código de error (4xx o 5xx)
+            console.error("Error de envío:", error);
+
+            // 1. Mostrar notificación de error
+            mostrarNotificacion("Error al enviar mensaje. Intente de nuevo.", '#EF4444'); // Rojo
+
+            // Nota: El formulario NO se limpia si hay un error
+        });
     });
-});
 
 
-    spanClose.onclick = function() { modal.style.display = "none"; }
-    window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
+    /**
+     * Función para mostrar la notificación tipo "Toast".
+     * @param {string} mensaje - El texto a mostrar.
+     * @param {string} color - El color de fondo (por ejemplo, '#10B981').
+     */
+    function mostrarNotificacion(mensaje, color) {
+        const notificacion = document.getElementById('notificacion');
 
-    document.getElementById("formMensaje").addEventListener("submit", function(e) {
-        e.preventDefault();
-        cargando.style.display = "block";
+        // Si ya hay una notificación visible, la eliminamos primero
+        if (notificacion.timeoutId) {
+            clearTimeout(notificacion.timeoutId);
+            notificacion.style.opacity = '0';
+            notificacion.style.transform = 'translateY(-10px)';
+        }
 
-        const data = new FormData(this);
-        fetch("/enviarMensaje", { method: "POST", body: data })
-            .then(response => {
-                // PRIMER CAMBIO: Si el estado HTTP es 200 (OK), asumimos el éxito.
-                if (!response.ok) {
-                    // Si el estado no es 200 (ej. 404, 500), lanzamos un error real.
-                    throw new Error('La respuesta HTTP no fue exitosa. Status: ' + response.status);
-                }
-                return response.text(); // Leemos el texto (aunque ya no lo evaluaremos estrictamente)
-            })
-            .then(result => {
-                cargando.style.display = "none";
-                // SEGUNDO CAMBIO: Siempre mostramos éxito si el fetch no falló.
-                alert("Mensaje enviado correctamente a " + emailDestinatarioInput.value);
-                modal.style.display = "none";
-                this.reset();
-            })
-            .catch(error => {
-                cargando.style.display = "none";
-                console.error(error);
-                // Si llegamos aquí, fue por un fallo real (red o un error 500 del servidor).
-                alert("Error al enviar mensaje. (Fallo de red o servidor).");
-            });
-    });
+        notificacion.textContent = mensaje;
+        notificacion.style.backgroundColor = color;
+
+        // Animación de entrada
+        setTimeout(() => {
+            notificacion.style.opacity = '1';
+            notificacion.style.transform = 'translateY(0)';
+        }, 50);
+
+        // Animación de salida después de 3 segundos
+        notificacion.timeoutId = setTimeout(() => {
+            notificacion.style.opacity = '0';
+            notificacion.style.transform = 'translateY(-10px)';
+        }, 3000);
+    }
+
 </script>
-
 </body>
 </html>
