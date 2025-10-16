@@ -1,0 +1,16 @@
+# =======================================================
+# PERFIL 'render' - USADO POR EL SERVICIO WEB EN RENDER
+# =======================================================
+
+# 1. URL INTERNA DE LA BASE DE DATOS (CRÍTICO)
+spring.datasource.url=jdbc:postgresql://dpg-d3ntbkodl3ps739btd9g-a:5432/mensajeriabethel
+
+# 2. CREDENCIALES
+spring.datasource.username=samper
+spring.datasource.password=kfDm8VKl8BFsq4qgngeKYShJMpqZnm4V
+
+# 3. CONFIGURACIÓN SSL (Render requiere esto para la conexión)
+spring.datasource.properties.sslmode=require
+
+# 4. DIALECTO DE HIBERNATE
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
