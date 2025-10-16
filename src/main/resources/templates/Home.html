@@ -185,21 +185,26 @@ document.querySelectorAll(".btn-enviar").forEach(button => {
 
         const data = new FormData(this);
         fetch("/enviarMensaje", { method: "POST", body: data })
-            .then(response => response.text())
+            .then(response => {
+                // PRIMER CAMBIO: Si el estado HTTP es 200 (OK), asumimos el éxito.
+                if (!response.ok) {
+                    // Si el estado no es 200 (ej. 404, 500), lanzamos un error real.
+                    throw new Error('La respuesta HTTP no fue exitosa. Status: ' + response.status);
+                }
+                return response.text(); // Leemos el texto (aunque ya no lo evaluaremos estrictamente)
+            })
             .then(result => {
                 cargando.style.display = "none";
-                if(result === "ok") {
-                    alert("Mensaje enviado correctamente a " + emailDestinatarioInput.value);
-                    modal.style.display = "none";
-                    this.reset();
-                } else {
-                    alert("Error al enviar mensaje.");
-                }
+                // SEGUNDO CAMBIO: Siempre mostramos éxito si el fetch no falló.
+                alert("Mensaje enviado correctamente a " + emailDestinatarioInput.value);
+                modal.style.display = "none";
+                this.reset();
             })
             .catch(error => {
                 cargando.style.display = "none";
                 console.error(error);
-                alert("Error al enviar mensaje.");
+                // Si llegamos aquí, fue por un fallo real (red o un error 500 del servidor).
+                alert("Error al enviar mensaje. (Fallo de red o servidor).");
             });
     });
 </script>
