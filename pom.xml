@@ -38,26 +38,37 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- === DEPENDENCIA REQUERIDA PARA SENDGRID (La que genera el error) === -->
+		<dependency>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<!-- Usamos la versión estable 4.10.1 -->
+			<version>4.10.1</version>
+		</dependency>
+		<!-- =================================================================== -->
+
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 		</dependency>
-
-		<!-- ¡ELIMINADA! Ya no es necesaria en Spring Boot 3.x y estaba causando conflictos. -->
-		<!-- <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-java8time</artifactId>
-            <version>3.1.2.RELEASE</version>
-         </dependency> -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- CLAVE: Esta exclusión evita que Spring Boot intente configurar el cliente SMTP (que falla en Render) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.angus</groupId>
+					<artifactId>jakarta.mail</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
@@ -67,7 +78,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!-- NUEVO BLOQUE: Plugin para saltar la ejecución de pruebas -->
+			<!-- Plugin para saltar la ejecución de pruebas -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

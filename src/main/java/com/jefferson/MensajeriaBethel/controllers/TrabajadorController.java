@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
-public class TrabajadorController {
+public class    TrabajadorController {
 
     private final TrabajadorRepository trabajadorRepository;
 

@@ -2,6 +2,7 @@ package com.jefferson.MensajeriaBethel.controllers;
 
 import com.jefferson.MensajeriaBethel.models.Mensaje;
 import com.jefferson.MensajeriaBethel.services.MensajeService;
+import com.jefferson.MensajeriaBethel.utils.FiltroContenido;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ public class MensajeController {
         this.mensajeService = mensajeService;
     }
 
-    // Método existente para enviar mensaje
+    // Método para manejar el envío de mensajes desde el formulario
     @PostMapping("/enviarMensaje")
     @ResponseBody
     public String enviarMensaje(
@@ -28,18 +29,33 @@ public class MensajeController {
             @RequestParam String emailDestinatario,
             @RequestParam String mensaje,
             @RequestParam String asunto,
-            @RequestParam String nombreTrabajador
+            @RequestParam String nombreTrabajador // Asumo que este campo también viene del formulario
     ) {
+        // === VALIDACIÓN DE GROSERÍAS ===
+        if (FiltroContenido.contieneGroserias(asunto) || FiltroContenido.contieneGroserias(mensaje)) {
+            // Devuelve un mensaje de error que el frontend debe manejar
+            return "ERROR: El mensaje o el asunto contiene lenguaje no apropiado (groserías).";
+        }
+
+        // === CREACIÓN Y ENVÍO DEL MENSAJE ===
         Mensaje m = new Mensaje(nombreRemitente, emailDestinatario, mensaje, asunto, nombreTrabajador);
-        mensajeService.enviarMensaje(m);
-        return "ok";
+
+        try {
+            mensajeService.enviarMensaje(m);
+            return "ok"; // Respuesta de éxito
+        } catch (Exception e) {
+            // Si hay un error en el servicio (ej. fallo de la API de SendGrid),
+            // registramos el error y devolvemos una respuesta de fallo.
+            System.err.println("Error al procesar el envío: " + e.getMessage());
+            return "ERROR: Fallo interno al enviar el correo. Inténtalo de nuevo.";
+        }
     }
 
-    // NUEVO: Mostrar todos los mensajes
+    // Método para mostrar todos los mensajes en la bandeja
     @GetMapping("/Bandeja")
     public String verMensajes(Model model) {
         List<Mensaje> mensajes = mensajeService.obtenerTodosMensajes();
         model.addAttribute("mensajes", mensajes);
-        return "Bandeja"; // el nombre de la plantilla Thymeleaf
+        return "Bandeja"; // el nombre de la plantilla Thymeleaf (o la que uses)
     }
 }
