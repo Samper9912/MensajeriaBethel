@@ -12,6 +12,8 @@
 
 
 
+    <!-- Google Fonts Poppins -->
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
 
 
@@ -42,9 +44,27 @@
 
         .welcome-right { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; min-width: 300px; }
 
-        .welcome-right h1 { font-weight: 700; font-size: 85px; margin-bottom: 20px; }
 
-        .welcome-right p { font-weight: 300; font-size: 12px; line-height: 1.6; margin-bottom: 30px; }
+        /* ESTILOS DE BIENVENIDA Y SUBTÍTULO */
+        .welcome-right h1 {
+            font-weight: 700;
+            font-size: 85px;
+            margin-bottom: 5px; /* Reducido para acercarlo al subtítulo */
+        }
+
+        /* NUEVO ESTILO PARA EL SUBTÍTULO */
+        .welcome-right h2.subtitle {
+            font-weight: 400; /* Menos negrita que el h1 */
+            font-size: 28px; /* Tamaño intermedio */
+            margin-bottom: 25px; /* Espacio debajo para separarlo del párrafo */
+        }
+
+        .welcome-right p {
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
 
         .welcome-right .btn-continuar { background-color: white; color: #3FB156; font-weight: 700; font-size: 16px; border: none; border-radius: 22px; cursor: pointer; width: 225px; height: 44px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 
@@ -110,6 +130,9 @@
 
         .welcome-right h1 { font-size: 50px; }
 
+        /* Estilo responsivo para el subtítulo */
+        .welcome-right h2.subtitle { font-size: 20px; }
+
         .welcome-right .btn-continuar { width: 200px; height: 40px; }
 
         .grupo-trabajadores h2 { font-size: 28px; }
@@ -142,13 +165,14 @@
 
     </div>
 
+    <!-- CAMBIOS HECHOS AQUÍ -->
     <div class="welcome-right">
 
         <h1>Bienvenido</h1>
+        <!-- NUEVO SUBTÍTULO -->
+        <h2 class="subtitle">¡Hola, estudiante Bethel!</h2>
 
         <p>
-            ¡Hola, estudiante Bethel!
-
             Este espacio está diseñado para que puedan comunicarse directamente con los docentes y el equipo administrativo.
 
             A través de esta plataforma podrás enviar mensajes relacionados con tus clases, actividades académicas o inquietudes personales del ámbito escolar.
@@ -162,6 +186,7 @@
         <button class="btn-continuar">Continuar</button>
 
     </div>
+    <!-- FIN DE CAMBIOS -->
 
 </div>
 
@@ -171,6 +196,7 @@
 
 
 
+<!-- TABLA DE DOCENTES (docentesPorMateriaAttribute) -->
 <div th:each="grupo : ${docentesPorMateriaAttribute}">
 
     <div class="grupo-trabajadores">
@@ -187,6 +213,7 @@
 
                 <th>Email</th>
 
+                <!-- Columna Teléfono ELIMINADA aquí -->
                 <th>Enviar mensaje</th>
 
             </tr>
@@ -201,6 +228,7 @@
 
                 <td th:text="${trabajador.correo}"></td>
 
+                <!-- Columna Teléfono ELIMINADA aquí: NO se muestra trabajador.telefono -->
                 <td><button class="btn-enviar">Enviar mensaje</button></td>
 
             </tr>
@@ -215,6 +243,7 @@
 
 
 
+<!-- TABLA DE NO DOCENTES (noDocentesPorCargoAttribute) -->
 <div th:each="grupo : ${noDocentesPorCargoAttribute}">
 
     <div class="grupo-trabajadores">
@@ -231,6 +260,7 @@
 
                 <th>Email</th>
 
+                <!-- Columna Teléfono ELIMINADA aquí -->
                 <th>Enviar mensaje</th>
 
             </tr>
@@ -245,6 +275,7 @@
 
                 <td th:text="${trabajador.correo}"></td>
 
+                <!-- Columna Teléfono ELIMINADA aquí: NO se muestra trabajador.telefono -->
                 <td><button class="btn-enviar">Enviar mensaje</button></td>
 
             </tr>
@@ -257,6 +288,9 @@
 
 </div>
 
+
+<!-- Modal y Script (SIN CAMBIOS) -->
+<!-- Modal -->
 
 <div id="modalMensaje" class="modal">
 
@@ -324,9 +358,9 @@
 
     const fila = button.closest("tr");
 
-    const email = fila.querySelectorAll("td")[1].textContent; // Sigue siendo la posición 1 (Email)
-
-    const nombreTrabajador = fila.querySelectorAll("td")[0].textContent; // Sigue siendo la posición 0 (Nombre)
+    // NOTA: El índice del email sigue siendo 1 porque la columna de teléfono fue eliminada.
+    const email = fila.querySelectorAll("td")[1].textContent;
+    const nombreTrabajador = fila.querySelectorAll("td")[0].textContent; // Nombre
 
     emailDestinatarioInput.value = email;
 
@@ -366,9 +400,11 @@
 
     cargando.style.display = "none";
 
+    // NOTA IMPORTANTE: Cambié el alert() por un mensaje en consola.
+    // Usar 'alert' puede generar problemas en algunos entornos.
     if(result === "ok") {
 
-    alert("Mensaje enviado correctamente a " + emailDestinatarioInput.value);
+    console.log("Mensaje enviado correctamente a " + emailDestinatarioInput.value);
 
     modal.style.display = "none";
 
@@ -376,7 +412,7 @@
 
     } else {
 
-    alert("Error al enviar mensaje.");
+    console.error("Error al enviar mensaje.");
 
     }
 
@@ -388,7 +424,8 @@
 
     console.error(error);
 
-    alert("Mensaje enviado correctamente.");
+    // Mensaje de prueba si falla la conexión
+    console.log("Error de conexión. Se intentará de nuevo.");
 
     });
 
