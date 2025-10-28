@@ -12,8 +12,6 @@
 
 
 
-    <!-- Google Fonts Poppins -->
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
 
 
@@ -189,8 +187,6 @@
 
                 <th>Email</th>
 
-                <th>Teléfono</th>
-
                 <th>Enviar mensaje</th>
 
             </tr>
@@ -204,8 +200,6 @@
                 <td th:text="${trabajador.nombres}"></td>
 
                 <td th:text="${trabajador.correo}"></td>
-
-                <td th:text="${trabajador.telefono}"></td>
 
                 <td><button class="btn-enviar">Enviar mensaje</button></td>
 
@@ -237,8 +231,6 @@
 
                 <th>Email</th>
 
-                <th>Teléfono</th>
-
                 <th>Enviar mensaje</th>
 
             </tr>
@@ -253,8 +245,6 @@
 
                 <td th:text="${trabajador.correo}"></td>
 
-                <td th:text="${trabajador.telefono}"></td>
-
                 <td><button class="btn-enviar">Enviar mensaje</button></td>
 
             </tr>
@@ -267,9 +257,6 @@
 
 </div>
 
-
-
-<!-- Modal -->
 
 <div id="modalMensaje" class="modal">
 
@@ -337,9 +324,9 @@
 
     const fila = button.closest("tr");
 
-    const email = fila.querySelectorAll("td")[1].textContent;
+    const email = fila.querySelectorAll("td")[1].textContent; // Sigue siendo la posición 1 (Email)
 
-    const nombreTrabajador = fila.querySelectorAll("td")[0].textContent; // <-- Primer columna: nombre
+    const nombreTrabajador = fila.querySelectorAll("td")[0].textContent; // Sigue siendo la posición 0 (Nombre)
 
     emailDestinatarioInput.value = email;
 
