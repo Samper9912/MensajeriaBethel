@@ -12,7 +12,6 @@ import java.util.List;
 @Service
 public class MensajeService {
 
-    // Ahora se resuelve porque SendGridEmailService está en esta misma carpeta/paquete
     private final SendGridEmailService sendGridEmailService;
     private final MensajeRepository mensajeRepository;
 
@@ -21,7 +20,8 @@ public class MensajeService {
         this.mensajeRepository = mensajeRepository;
     }
 
-    public void enviarMensaje(Mensaje mensaje) {
+    // MODIFICADO: Ahora devuelve un 'boolean' que indica el éxito del envío.
+    public boolean enviarMensaje(Mensaje mensaje) {
         // Guardar en base de datos
         mensajeRepository.save(mensaje);
 
@@ -44,11 +44,8 @@ public class MensajeService {
                 cuerpoHtml
         );
 
-        if (exito) {
-            System.out.println("Correo enviado con éxito a: " + mensaje.getEmailDestinatario());
-        } else {
-            System.err.println("Error al intentar enviar el correo a: " + mensaje.getEmailDestinatario());
-        }
+        // Devolvemos el resultado del envío
+        return exito;
     }
 
     public List<Mensaje> obtenerTodosMensajes() {

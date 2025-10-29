@@ -348,6 +348,7 @@
     const emailDestinatarioInput = document.getElementById("emailDestinatario");
     const cargando = document.getElementById("cargando");
 
+    // Abrir el modal con los datos del destinatario
     document.querySelectorAll(".btn-enviar").forEach(button => {
       button.addEventListener("click", function() {
         const fila = button.closest("tr");
@@ -360,58 +361,71 @@
       });
     });
 
-    spanClose.onclick = () => modal.style.display = "none";
-    window.onclick = event => { if (event.target == modal) modal.style.display = "none"; };
+    // Cerrar modal
+    spanClose.onclick = function() { modal.style.display = "none"; };
+    window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; };
 
-    document.getElementById("formMensaje").addEventListener("submit", function(e) {
+    // Envío del mensaje con fetch en formato JSON
+    document.getElementById("formMensaje").addEventListener("submit", async function(e) {
       e.preventDefault();
+
       cargando.style.display = "block";
 
+      // Capturar datos del formulario
       const mensaje = {
+        nombreRemitente: document.getElementById("nombreRemitente").value,
         nombreTrabajador: document.getElementById("nombreTrabajadorHidden").value,
-        emailDestinatario: document.getElementById("emailDestinatario").value,
         asunto: document.getElementById("asunto").value,
+        emailDestinatario: document.getElementById("emailDestinatario").value,
         mensaje: document.getElementById("mensaje").value
       };
 
-      fetch("/enviarMensaje", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(mensaje)
-      })
-      .then(response => response.json())
-      .then(result => {
-        cargando.style.display = "none";
-
-        if (result.contieneGroseria) {
-          Swal.fire({
-            icon: "warning",
-            title: "Lenguaje no permitido",
-            text: result.message
-          });
-          return;
-        }
-
-        Swal.fire({
-          icon: "success",
-          title: "Mensaje enviado",
-          text: result.message
+      try {
+        const response = await fetch("/enviarMensaje", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(mensaje)
         });
 
-        modal.style.display = "none";
-        this.reset();
-      })
-      .catch(error => {
+        const result = await response.json();
+        cargando.style.display = "none";
+
+        // Mostrar resultados
+        if (result.contieneGroseria) {
+          Swal.fire({
+            icon: "error",
+            title: "Mensaje no enviado",
+            text: result.message
+          });
+        } else if (response.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "Mensaje enviado",
+            text: result.message
+          });
+          modal.style.display = "none";
+          this.reset();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: result.message || "Hubo un problema al enviar el mensaje."
+          });
+        }
+      } catch (error) {
         cargando.style.display = "none";
         Swal.fire({
           icon: "error",
           title: "Error de conexión",
-          text: "No se pudo enviar el mensaje. Intenta de nuevo."
+          text: "No se pudo conectar con el servidor."
         });
-        console.error("Error en fetch:", error);
-      });
+        console.error("Error:", error);
+      }
     });
 </script>
+
 
 
 
