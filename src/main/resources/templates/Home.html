@@ -143,6 +143,8 @@
 
     </style>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -341,96 +343,74 @@
 
 
 <script th:inline="none">
-
     const modal = document.getElementById("modalMensaje");
-
     const spanClose = document.getElementsByClassName("close")[0];
-
     const emailDestinatarioInput = document.getElementById("emailDestinatario");
-
     const cargando = document.getElementById("cargando");
 
-
-
     document.querySelectorAll(".btn-enviar").forEach(button => {
+      button.addEventListener("click", function() {
+        const fila = button.closest("tr");
+        const email = fila.querySelectorAll("td")[1].textContent;
+        const nombreTrabajador = fila.querySelectorAll("td")[0].textContent;
 
-    button.addEventListener("click", function() {
-
-    const fila = button.closest("tr");
-
-    // NOTA: El índice del email sigue siendo 1 porque la columna de teléfono fue eliminada.
-    const email = fila.querySelectorAll("td")[1].textContent;
-    const nombreTrabajador = fila.querySelectorAll("td")[0].textContent; // Nombre
-
-    emailDestinatarioInput.value = email;
-
-    document.getElementById("nombreTrabajadorHidden").value = nombreTrabajador; // hidden input
-
-    modal.style.display = "block";
-
+        emailDestinatarioInput.value = email;
+        document.getElementById("nombreTrabajadorHidden").value = nombreTrabajador;
+        modal.style.display = "block";
+      });
     });
 
-    });
-
-
-
-
-
-    spanClose.onclick = function() { modal.style.display = "none"; }
-
-    window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
-
-
+    spanClose.onclick = () => modal.style.display = "none";
+    window.onclick = event => { if (event.target == modal) modal.style.display = "none"; };
 
     document.getElementById("formMensaje").addEventListener("submit", function(e) {
+      e.preventDefault();
+      cargando.style.display = "block";
 
-    e.preventDefault();
+      const mensaje = {
+        nombreTrabajador: document.getElementById("nombreTrabajadorHidden").value,
+        emailDestinatario: document.getElementById("emailDestinatario").value,
+        asunto: document.getElementById("asunto").value,
+        mensaje: document.getElementById("mensaje").value
+      };
 
-    cargando.style.display = "block";
+      fetch("/enviarMensaje", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(mensaje)
+      })
+      .then(response => response.json())
+      .then(result => {
+        cargando.style.display = "none";
 
+        if (result.contieneGroseria) {
+          Swal.fire({
+            icon: "warning",
+            title: "Lenguaje no permitido",
+            text: result.message
+          });
+          return;
+        }
 
+        Swal.fire({
+          icon: "success",
+          title: "Mensaje enviado",
+          text: result.message
+        });
 
-    const data = new FormData(this);
-
-    fetch("/enviarMensaje", { method: "POST", body: data })
-
-    .then(response => response.text())
-
-    .then(result => {
-
-    cargando.style.display = "none";
-
-    // NOTA IMPORTANTE: Cambié el alert() por un mensaje en consola.
-    // Usar 'alert' puede generar problemas en algunos entornos.
-    if(result === "ok") {
-
-    console.log("Mensaje enviado correctamente a " + emailDestinatarioInput.value);
-
-    modal.style.display = "none";
-
-    this.reset();
-
-    } else {
-
-    console.error("Error al enviar mensaje.");
-
-    }
-
-    })
-
-    .catch(error => {
-
-    cargando.style.display = "none";
-
-    console.error(error);
-
-    // Mensaje de prueba si falla la conexión
-    console.log("Error de conexión. Se intentará de nuevo.");
-
+        modal.style.display = "none";
+        this.reset();
+      })
+      .catch(error => {
+        cargando.style.display = "none";
+        Swal.fire({
+          icon: "error",
+          title: "Error de conexión",
+          text: "No se pudo enviar el mensaje. Intenta de nuevo."
+        });
+        console.error("Error en fetch:", error);
+      });
     });
-
-    });
-
 </script>
 
 
