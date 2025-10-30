@@ -14,7 +14,11 @@ public class FiltroContenido {
     // Lista de palabras prohibidas (usar Set para búsquedas O(1) rápidas).
     private static final Set<String> PALABRAS_PROHIBIDAS = new HashSet<>(Arrays.asList(
             "puta", "mierda", "cabron", "malparido", "idiota", "imbecil",
-            "estupido", "perro", "pene", "vagina", "culo", "teta", "caca", "pito", "verga"
+            "estupido", "perro", "pene", "vagina", "culo", "teta", "caca", "pito", "verga", "p u t a",
+            "p e r r a", "inepto", "inservible", "gay", "gei", "cachon", "hijoputa", "hijueputa", "hijo de puta",
+            "hpta", "hp", "hpt", "mlp", "malparido", "cagon", "cuca", "verga", "sexo", "anal", "trio", "culear",
+            "culiar", "chupar", "chupona", "muera", "morir", "matar", "muerto", "muerte", "pija", "cabron", "chinga",
+            "sozorra", "sosorra", "sozorrita", "sosorrita", "sapo"
     ));
 
     /**
