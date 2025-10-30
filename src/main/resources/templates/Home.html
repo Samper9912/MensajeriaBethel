@@ -30,9 +30,12 @@
         }
 
         .welcome-right h2.subtitle {
-            font-weight: 400;
-            font-size: 28px;
+            font-weight: 700; /* igual de fuerte que el h1 */
+            font-size: 85px;  /* mismo tamaño */
             margin-bottom: 25px;
+            text-decoration: underline;
+            text-decoration-color: rgba(255,255,255,0.4); /* subrayado suave */
+            text-underline-offset: 6px; /* separación para que se vea limpio */
         }
 
         .welcome-right p {
@@ -82,8 +85,8 @@
 
         @media (max-width: 768px) {
             .welcome-section { flex-direction: column; padding: 40px 5%; }
-            .welcome-right h1 { font-size: 50px; }
-            .welcome-right h2.subtitle { font-size: 20px; }
+            .welcome-right h1,
+            .welcome-right h2.subtitle { font-size: 50px; } /* ambos iguales también en móvil */
             .welcome-right .btn-continuar { width: 200px; height: 40px; }
             .grupo-trabajadores h2 { font-size: 28px; }
             .tabla-trabajadores th, .tabla-trabajadores td { font-size: 12px; }
@@ -123,7 +126,7 @@
 
 <h2 style="text-align:center; font-size:48px; color:#3FB056; margin-top:40px; font-weight:800;">Directorio</h2>
 
-<!-- TABLA DE DOCENTES -->
+<!-- TABLAS (sin cambios) -->
 <div th:each="grupo : ${docentesPorMateriaAttribute}">
     <div class="grupo-trabajadores">
         <h2 th:text="${grupo.key}"></h2>
@@ -146,7 +149,6 @@
     </div>
 </div>
 
-<!-- TABLA DE NO DOCENTES -->
 <div th:each="grupo : ${noDocentesPorCargoAttribute}">
     <div class="grupo-trabajadores">
         <h2 th:text="${grupo.key}"></h2>
@@ -169,7 +171,7 @@
     </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL (sin cambios) -->
 <div id="modalMensaje" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -200,7 +202,6 @@
     const emailDestinatarioInput = document.getElementById("emailDestinatario");
     const cargando = document.getElementById("cargando");
 
-    // Abrir el modal
     document.querySelectorAll(".btn-enviar").forEach(button => {
         button.addEventListener("click", function() {
             const fila = button.closest("tr");
@@ -212,11 +213,9 @@
         });
     });
 
-    // Cerrar modal
     spanClose.onclick = () => modal.style.display = "none";
     window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
 
-    // Envío del mensaje
     document.getElementById("formMensaje").addEventListener("submit", async function(e) {
         e.preventDefault();
         cargando.style.display = "block";
