@@ -30,13 +30,14 @@
         }
 
         .welcome-right h2.subtitle {
-            font-weight: 700; /* igual de fuerte que el h1 */
-            font-size: 85px;  /* mismo tamaño */
-            margin-bottom: 25px;
-            text-decoration: underline;
-            text-decoration-color: rgba(255,255,255,0.4); /* subrayado suave */
-            text-underline-offset: 6px; /* separación para que se vea limpio */
-        }
+    font-weight: 700;
+    font-size: 85px;
+    margin-bottom: 25px;
+    display: inline-block; /* esto evita que se rompa la línea */
+    border-bottom: 4px solid rgba(255,255,255,0.3); /* subrayado suave */
+    padding-bottom: 5px; /* espacio entre texto y línea */
+}
+
 
         .welcome-right p {
             font-weight: 400;
