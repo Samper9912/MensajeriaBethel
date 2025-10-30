@@ -35,10 +35,9 @@
             margin-bottom: 25px;
         }
 
-        /* Ajuste solicitado: los dos párrafos iguales y un poco más grandes */
         .welcome-right p {
             font-weight: 400;
-            font-size: 18px; /* antes 16px */
+            font-size: 18px;
             line-height: 1.7;
             margin-bottom: 15px;
             max-width: 650px;
@@ -55,6 +54,12 @@
             width: 225px;
             height: 44px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .welcome-right .btn-continuar:hover {
+            background-color: #2e9147;
+            color: white;
         }
 
         .grupo-trabajadores { background-color: #EFEFEF; border-radius: 26px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 50px auto; padding: 20px; max-width: 1000px; }
@@ -118,11 +123,17 @@
             <strong>Recuerda que este buzón busca fortalecer el diálogo respetuoso y la confianza entre estudiantes y la institución.</strong>
         </p>
 
-        <button class="btn-continuar">Continuar</button>
+        <!-- BOTÓN CON FUNCIONALIDAD -->
+        <button class="btn-continuar" onclick="document.getElementById('directorio').scrollIntoView({ behavior: 'smooth' });">
+            Continuar
+        </button>
     </div>
 </div>
 
-<h2 style="text-align:center; font-size:48px; color:#3FB056; margin-top:40px; font-weight:800;">Directorio</h2>
+<!-- AGREGAMOS ID PARA EL SCROLL -->
+<h2 id="directorio" style="text-align:center; font-size: 85px; color:#3FB056; margin-top:60px; font-weight:800; letter-spacing:3px;">
+    Directorio
+</h2>
 
 <!-- TABLA DE DOCENTES -->
 <div th:each="grupo : ${docentesPorMateriaAttribute}">
@@ -203,7 +214,6 @@
     const emailDestinatarioInput = document.getElementById("emailDestinatario");
     const cargando = document.getElementById("cargando");
 
-    // Abrir el modal
     document.querySelectorAll(".btn-enviar").forEach(button => {
         button.addEventListener("click", function() {
             const fila = button.closest("tr");
@@ -215,11 +225,9 @@
         });
     });
 
-    // Cerrar modal
     spanClose.onclick = () => modal.style.display = "none";
     window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
 
-    // Envío del mensaje
     document.getElementById("formMensaje").addEventListener("submit", async function(e) {
         e.preventDefault();
         cargando.style.display = "block";
